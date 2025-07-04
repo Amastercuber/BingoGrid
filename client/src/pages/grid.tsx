@@ -26,7 +26,7 @@ export default function GridPage() {
     setShowError(true);
   };
 
-  const validateInput = (value: string) => {
+  const validateInput = (value: string): { valid: false; message: string } | { valid: true; number: number } => {
     const number = parseInt(value);
     if (isNaN(number)) {
       return { valid: false, message: "Please enter a valid number." };
@@ -114,7 +114,7 @@ export default function GridPage() {
             }
             border rounded-lg flex items-center justify-center cursor-pointer 
             transition-all duration-200 text-white font-medium select-none
-            aspect-square text-xs sm:text-sm lg:text-base
+            aspect-square text-sm
           `}
         >
           {i}
@@ -125,83 +125,88 @@ export default function GridPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto dark-surface">
+    <div className="h-screen flex flex-col dark-surface overflow-hidden">
       {/* Header */}
-      <header className="text-center mb-6 lg:mb-8">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
+      <header className="text-center py-4 border-b dark-border">
+        <h1 className="text-xl sm:text-2xl font-bold text-white">
           Interactive Number Grid
         </h1>
-        <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
-          Click on numbers to highlight them, or use the controls below to highlight specific or random numbers
+        <p className="text-gray-400 text-xs sm:text-sm mt-1">
+          Click numbers to highlight them
         </p>
       </header>
 
-      {/* Grid Container */}
-      <div className="flex-1 flex flex-col items-center justify-center mb-6 lg:mb-8">
-        <div className="w-full max-w-4xl">
-          <div className="grid grid-cols-10 gap-1 sm:gap-2 lg:gap-3 w-full aspect-square max-w-full">
-            {renderGrid()}
-          </div>
-        </div>
-      </div>
-
-      {/* Controls Panel */}
-      <div className="dark-elevated border dark-border rounded-lg p-4 sm:p-6 lg:p-8 shadow-xl max-w-2xl mx-auto w-full">
-        {/* Manual Input Section */}
-        <div className="mb-6">
-          <Label htmlFor="numberInput" className="block text-sm font-medium text-gray-300 mb-2">
-            Enter a number (1-100)
-          </Label>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Input
-              ref={inputRef}
-              id="numberInput"
-              type="number"
-              min="1"
-              max="100"
-              placeholder="Enter number..."
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
-              className="flex-1 px-4 py-3 dark-surface border dark-border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-            />
-            <Button
-              onClick={highlightEnteredNumber}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800 whitespace-nowrap"
-            >
-              Highlight Entered Number
-            </Button>
-          </div>
-          {/* Error Message */}
-          {showError && (
-            <div className="mt-2 text-red-400 text-sm" role="alert">
-              {errorMessage}
+      {/* Main Content Area */}
+      <div className="flex-1 flex p-4 gap-4 overflow-hidden">
+        {/* Left Side - Controls */}
+        <div className="w-1/3 min-w-[300px] flex flex-col">
+          <div className="dark-elevated border dark-border rounded-lg p-4 shadow-xl h-full flex flex-col">
+            {/* Manual Input Section */}
+            <div className="mb-6">
+              <Label htmlFor="numberInput" className="block text-sm font-medium text-gray-300 mb-2">
+                Enter a number (1-100)
+              </Label>
+              <div className="flex flex-col gap-2">
+                <Input
+                  ref={inputRef}
+                  id="numberInput"
+                  type="number"
+                  min="1"
+                  max="100"
+                  placeholder="Enter number..."
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
+                  className="px-3 py-2 dark-surface border dark-border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+                />
+                <Button
+                  onClick={highlightEnteredNumber}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-800"
+                >
+                  Highlight Number
+                </Button>
+              </div>
+              {/* Error Message */}
+              {showError && (
+                <div className="mt-2 text-red-400 text-sm" role="alert">
+                  {errorMessage}
+                </div>
+              )}
             </div>
-          )}
+
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3 mb-6">
+              <Button
+                onClick={lightUpRandomNumber}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-gray-800"
+              >
+                Light up Random Number
+              </Button>
+              <Button
+                onClick={clearAllHighlights}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-gray-800"
+              >
+                Clear All
+              </Button>
+            </div>
+
+            {/* Status Indicator */}
+            <div className="mt-auto text-center text-gray-400 text-sm">
+              <span>
+                {highlightedNumbers.size} number{highlightedNumbers.size !== 1 ? 's' : ''} highlighted
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button
-            onClick={lightUpRandomNumber}
-            className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Light up Random Number
-          </Button>
-          <Button
-            onClick={clearAllHighlights}
-            className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            Clear All
-          </Button>
+        {/* Right Side - Grid */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full h-full max-w-2xl max-h-[calc(100vh-200px)] aspect-square">
+            <div className="grid grid-cols-10 gap-1 w-full h-full">
+              {renderGrid()}
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Status Indicator */}
-      <div className="text-center mt-4 text-gray-400 text-sm">
-        <span>
-          {highlightedNumbers.size} number{highlightedNumbers.size !== 1 ? 's' : ''} highlighted
-        </span>
       </div>
     </div>
   );
