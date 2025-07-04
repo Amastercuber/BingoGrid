@@ -8,6 +8,7 @@ export default function GridPage() {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
+  const [lastAddedNumber, setLastAddedNumber] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Clear error message after 3 seconds
@@ -20,6 +21,16 @@ export default function GridPage() {
       return () => clearTimeout(timer);
     }
   }, [showError]);
+
+  // Clear last added number after 3 seconds
+  useEffect(() => {
+    if (lastAddedNumber !== null) {
+      const timer = setTimeout(() => {
+        setLastAddedNumber(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [lastAddedNumber]);
 
   const showErrorMessage = (message: string) => {
     setErrorMessage(message);
@@ -68,6 +79,7 @@ export default function GridPage() {
     }
 
     setHighlightedNumbers(prev => new Set(prev).add(validation.number));
+    setLastAddedNumber(validation.number);
     setInputValue("");
   };
 
@@ -88,6 +100,7 @@ export default function GridPage() {
     const randomIndex = Math.floor(Math.random() * availableNumbers.length);
     const randomNumber = availableNumbers[randomIndex];
     setHighlightedNumbers(prev => new Set(prev).add(randomNumber));
+    setLastAddedNumber(randomNumber);
     
     // Briefly flash the randomly selected number
     const cell = document.querySelector(`[data-number="${randomNumber}"]`) as HTMLElement;
@@ -101,6 +114,7 @@ export default function GridPage() {
 
   const clearAllHighlights = () => {
     setHighlightedNumbers(new Set());
+    setLastAddedNumber(null);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -121,6 +135,7 @@ export default function GridPage() {
     const cells = [];
     for (let i = 1; i <= 100; i++) {
       const isHighlighted = highlightedNumbers.has(i);
+      const isLastAdded = lastAddedNumber === i;
       cells.push(
         <div
           key={i}
@@ -128,7 +143,9 @@ export default function GridPage() {
           onClick={() => toggleHighlight(i)}
           className={`
             ${isHighlighted 
-              ? 'bg-blue-600 border-blue-500 hover:bg-blue-700 shadow-lg' 
+              ? isLastAdded 
+                ? 'bg-green-600 border-green-500 hover:bg-green-700 shadow-lg shadow-green-500/50' 
+                : 'bg-blue-600 border-blue-500 hover:bg-blue-700 shadow-lg'
               : 'bg-gray-800 border-gray-600 hover:bg-gray-700'
             }
             border rounded-lg flex items-center justify-center cursor-pointer 
@@ -210,10 +227,15 @@ export default function GridPage() {
             </div>
 
             {/* Status Indicator */}
-            <div className="mt-auto text-center text-gray-400 text-sm">
-              <span>
+            <div className="mt-auto text-center text-gray-400 text-sm space-y-1">
+              <div>
                 {highlightedNumbers.size} number{highlightedNumbers.size !== 1 ? 's' : ''} highlighted
-              </span>
+              </div>
+              {lastAddedNumber && (
+                <div className="text-green-400 font-medium">
+                  Just added: {lastAddedNumber}
+                </div>
+              )}
             </div>
           </div>
         </div>
