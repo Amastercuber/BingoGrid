@@ -62,12 +62,31 @@ export default function GridPage() {
       return;
     }
 
+    if (highlightedNumbers.has(validation.number)) {
+      showErrorMessage(`Number ${validation.number} is already highlighted.`);
+      return;
+    }
+
     setHighlightedNumbers(prev => new Set(prev).add(validation.number));
     setInputValue("");
   };
 
   const lightUpRandomNumber = () => {
-    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    // Get all numbers that are not highlighted
+    const availableNumbers = [];
+    for (let i = 1; i <= 100; i++) {
+      if (!highlightedNumbers.has(i)) {
+        availableNumbers.push(i);
+      }
+    }
+
+    if (availableNumbers.length === 0) {
+      showErrorMessage("All numbers are already highlighted!");
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+    const randomNumber = availableNumbers[randomIndex];
     setHighlightedNumbers(prev => new Set(prev).add(randomNumber));
     
     // Briefly flash the randomly selected number

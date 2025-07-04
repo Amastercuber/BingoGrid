@@ -109,6 +109,7 @@ This is a React-based interactive number grid application that allows users to h
 Changelog:
 - July 04, 2025. Initial setup with vertical layout
 - July 04, 2025. Updated to horizontal layout with controls on left, grid on right, no-scroll viewport optimization
+- July 04, 2025. Added duplicate number detection for manual input and smart random selection (avoids already highlighted numbers)
 ```
 
 ## User Preferences
