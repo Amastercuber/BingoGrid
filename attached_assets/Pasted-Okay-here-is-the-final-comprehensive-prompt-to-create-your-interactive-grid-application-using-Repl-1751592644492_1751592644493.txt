@@ -1,0 +1,49 @@
+Okay, here is the final, comprehensive prompt to create your interactive grid application using Replit:
+
+---
+
+**Final Prompt for Replit: Interactive Number Grid with Manual and Random Highlighting**
+
+"Create a single-page web application that features an interactive 10x10 number grid.
+
+**Core Functionality:**
+
+1.  **10x10 Grid Display:**
+    * The main area of the application should be a grid displaying numbers from 1 to 100.
+    * Each number must reside within its own distinct, clickable square.
+
+2.  **Manual Number Input & Highlighting:**
+    * Below the grid, include an **input field** where users can type a number.
+    * Add a button labeled **"Highlight Entered Number"**.
+    * When a user types a valid number (between 1 and 100, inclusive) into the input field and clicks this button, the corresponding square on the 10x10 grid must visually **"light up"** (change its background color to a distinct highlight color).
+    * Implement client-side validation: if an invalid number (outside the 1-100 range) or non-numeric input is entered, display a small, clear error message directly below the input field (do **not** use `alert()`).
+
+3.  **Random Number Highlighting:**
+    * Include a separate button labeled **"Light up Random Number"**.
+    * When this button is clicked, the application should generate a random integer between 1 and 100 (inclusive) and then automatically light up its corresponding square on the grid.
+
+4.  **Persistent Highlights:**
+    * All squares that have been lit up (whether by manual input or random generation) should **remain highlighted** when new numbers are subsequently lit up. The highlights should accumulate.
+
+5.  **Clear All Functionality:**
+    * Provide a **"Clear All" button** that, when clicked, resets the entire grid by removing all highlights, returning all squares to their original unlit state.
+
+**Technical Requirements:**
+
+* **HTML Structure:** Build the page using semantic HTML.
+* **CSS Styling:** Use **Tailwind CSS** exclusively for all styling. Load Tailwind via its CDN.
+    * Ensure a modern, clean, and visually appealing design.
+    * Make the layout fully **responsive**, adapting well to different screen sizes (mobile, tablet, desktop).
+    * Apply `rounded-lg` or similar classes to all interactive elements (buttons, input field) and grid cells for a consistent aesthetic.
+    * Use the **"Inter" font** (e.g., from Google Fonts CDN) for all text.
+* **JavaScript Interactivity:** Implement all dynamic behaviors (highlighting, validation, random number generation, clearing) using vanilla JavaScript. Do not use external JavaScript libraries or frameworks other than Tailwind's CDN.
+
+**Example User Flow:**
+
+1.  The user sees the 10x10 grid with numbers 1-100, an input field, and the "Highlight Entered Number", "Light up Random Number", and "Clear All" buttons.
+2.  The user types "55" into the input field and clicks "Highlight Entered Number". The square for "55" turns blue.
+3.  The user then clicks "Light up Random Number". A random number (e.g., "12") is generated, and its square also turns blue, while "55" remains blue.
+4.  The user types "105" into the input field and clicks "Highlight Entered Number". An error message "Please enter a number between 1 and 100." appears.
+5.  The user clicks "Clear All". All blue squares revert to their original unlit state."
+
+---
